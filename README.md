@@ -1,14 +1,15 @@
-# AeroGuard-IQ
-Autonomous Drone Navigation using Python and DroneKit.
+# AeroGuard-IQ: Autonomous Drone Navigation
+Master's Project (EEIT) - Otto von Guericke University Magdeburg
 
-## Latest Achievement
-- [x] **Stability Handshake:** Successfully implemented a 1450-throttle "Constant Pressure" logic to prevent EKF/GPS altitude drops.
-- [x] **Mission Success:** Reached a peak altitude of **47.10 meters** and navigated 10m North autonomously.
+## 🚀 Final Project Achievement: 100% Complete
+- [x] **Stability Handshake:** Successfully implemented a 1450-throttle "Constant Pressure" logic to prevent ArduCopter 3.3 EKF/GPS altitude drops.
+- [x] **High-Altitude Square Mission:** Reached a peak altitude of **111.79 meters**.
+- [x] **Geometric Navigation:** Completed an autonomous 4-waypoint square pattern (North -> East -> South -> West) with real-time telemetry logging.
 
-## Project Files
-* `waypoint_mission.py`: Main autonomous flight logic.
-* `flight_log_success_47m.csv`: Telemetry data showing the successful 47m climb.
+## 📁 Project Structure
+* `waypoint_mission.py`: Final mission script with multi-waypoint logic and 'Write' mode telemetry.
+* `flight_log_square_mission_111m.csv`: Complete telemetry log from the successful 111m square flight.
+* `requirements.txt`: Python dependencies for the project.
 
-## How to Run
-1. Start SITL: `py -3.9 -m dronekit_sitl copter-3.3`
-2. Run Script: `py -3.9 waypoint_mission.py`
+## 🛠️ Technical Implementation
+The system uses **DroneKit-SITL** and **Python 3.9**. It bypasses standard arming checks to simulate emergency autonomous maneuvers and uses a constant throttle override to maintain lift during GPS coordinate transitions.
