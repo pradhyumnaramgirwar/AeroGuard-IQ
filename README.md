@@ -1,46 +1,37 @@
 # AeroGuard-IQ: Autonomous Drone Navigation System
 **Master's Project (EEIT) - Otto von Guericke University Magdeburg**
 
-## 🚀 Project Achievement: 100% Complete
-This project implements an autonomous geometric flight mission using Python and DroneKit-SITL. The primary engineering challenge was overcoming a "Death Dive" altitude drop in the ArduCopter 3.3 firmware by implementing a custom stability handshake.
+## 🚀 Project Status: Phase 2 Complete (100%)
+This project implements an autonomous geometric flight mission using Python and DroneKit-SITL. The primary challenge was overcoming the "Death Dive" altitude drop in ArduCopter 3.3 by implementing a custom stability handshake and throttle tuning.
 
-### **Phase 1: Basic Stability & Logic**
-- [x] **Stability Handshake:** Successfully implemented a 1450-throttle "Constant Pressure" logic to bypass EKF/GPS altitude drops.
-- [x] **High-Altitude Mission:** Reached a peak altitude of **111.79 meters**.
-- [x] **Geometric Navigation:** Completed an autonomous 4-waypoint square pattern (North -> East -> South -> West) with real-time telemetry logging.
+---
 
-### Phase 2: Precision Altitude Control (Completed)
-Successfully transitioned from Phase 1 (High Altitude) to Phase 2 (Steady State Hover).
+## 📂 Phase 1: Stability & High-Altitude (Achievement)
+- **Problem:** Initial flights suffered from EKF/GPS altitude drops, leading to crashes.
+- **Solution:** Implemented a 1450 PWM "Constant Pressure" logic.
+- **Result:** Successfully reached a peak altitude of **111.79 meters** during a 4-waypoint square mission.
+- **Data:** `Phase1_HighAlt_111m.csv`
 
-### **Key Technical Wins:**
-- **System Identification:** Determined that **1350 PWM** is the equilibrium point ($Thrust \approx Weight$) for this simulated environment.
-- **Altitude Damping:** Reduced vertical drift from **111m** (Phase 1) down to a controlled range of **7m - 17m**.
-- **Data Integrity:** Generated `Phase2_Precision_1350PWM_Final.csv` documenting 4-waypoint stability.
+## 🎯 Phase 2: Precision Control & Tuning (Achievement)
+- **Objective:** Move from "Climbing" to "Precision Hover" at 10m.
+- **System Identification:** Conducted throttle-ramp tests (1450 -> 1420 -> 1400 -> 1380) to find the equilibrium point.
+- **Result:** Identified **1350 PWM** as the "Magic Number" for stable flight ($Thrust \approx Weight$).
+- **Success:** Completed a 4-waypoint square with altitude restricted to a damped range (7m - 17m).
+- **Data:** `Phase2_Precision_1350PWM_Final.csv`
 
-### **Flight Characteristics (1350 PWM):**
-* **Start Altitude:** 12.29m
-* **Peak Altitude:** 16.72m (Waypoint 1)
-* **Final Altitude:** 6.6m (Waypoint 4)
+---
 
 ## 📁 Project Structure
-* `waypoint_mission.py`: Final mission script with multi-waypoint logic and 'Write' mode telemetry.
-* `flight_log_square_mission_111m.csv`: Complete telemetry log from the successful 111m square flight.
-* `hello_drone.py`: Initial connection and heartbeat testing script.
+* `hover_tune_mission.py`: Phase 2 precision mission script (1350 PWM).
+* `waypoint_mission.py`: Original Phase 1 high-altitude script.
+* `/telemetry_logs`: Contains CSV data for both successful flight phases.
 * `requirements.txt`: Python dependencies (DroneKit & SITL).
 
 ## 🛠️ Technical Specifications
 - **Language:** Python 3.9
 - **Simulator:** DroneKit-SITL (ArduCopter V3.3)
-- **Control Strategy:** Forced Guided Mode with Channel Override stabilization.
-- **Data Persistence:** Real-time CSV logging of Voltage, Altitude, and GPS Coordinates.
-
-## 🏁 How to Run
-1. **Start the Simulator:**
-   `py -3.9 -m dronekit_sitl copter-3.3`
-2. **Execute the Mission:**
-   `py -3.9 waypoint_mission.py`
-3. **Review Telemetry:**
-   Open `flight_log.csv` to see the flight path data.
+- **Control Strategy:** Guided Mode with Manual PWM Channel Overrides.
+- **Next Step (Phase 3):** Implementation of a PID Controller for perfect altitude locking.
 
 ---
 *Developed by Pradhyumna Avinash Ramgirwar (2026)*
