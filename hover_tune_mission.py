@@ -7,9 +7,12 @@ print("Connecting to AeroGuard-IQ...")
 vehicle = connect('tcp:127.0.0.1:5760', wait_ready=False)
 
 def run_mission():
-    with open('precision_square_log.csv', 'w', newline='') as f:
+    # This specific filename ensures we don't look at old Phase 1 data
+    output_file = 'Phase2_Precision_1350PWM_Final.csv'
+    
+    with open(output_file, 'w', newline='') as f:
         writer = csv.writer(f)
-        writer.writerow(['Timestamp', 'Voltage', 'Altitude', 'Lat', 'Lon'])
+        writer.writerow(['Timestamp', 'Voltage', 'Altitude', 'Lat', 'Lon', 'PWM_Value'])
 
         print("--- Phase 1: Stabilization (60s) ---")
         time.sleep(60) 
@@ -31,17 +34,17 @@ def run_mission():
             time.sleep(1)
 
         print("--- Phase 4: Precision Square (1350 PWM) ---")
-        # Applying the Phase 2 'Magic Number' for stable altitude
-        vehicle.channels.overrides['3'] = 1350 
+        target_pwm = 1350
+        vehicle.channels.overrides['3'] = target_pwm 
         
         start_lat = vehicle.location.global_frame.lat
         start_lon = vehicle.location.global_frame.lon
         
         waypoints = [
-            LocationGlobalRelative(start_lat + 0.0001, start_lon, 10),            # North
-            LocationGlobalRelative(start_lat + 0.0001, start_lon + 0.0001, 10),   # East
-            LocationGlobalRelative(start_lat, start_lon + 0.0001, 10),            # South
-            LocationGlobalRelative(start_lat, start_lon, 10)                     # Home
+            LocationGlobalRelative(start_lat + 0.0001, start_lon, 10),
+            LocationGlobalRelative(start_lat + 0.0001, start_lon + 0.0001, 10),
+            LocationGlobalRelative(start_lat, start_lon + 0.0001, 10),
+            LocationGlobalRelative(start_lat, start_lon, 10)
         ]
 
         for i, wp in enumerate(waypoints):
@@ -49,12 +52,12 @@ def run_mission():
             vehicle.simple_goto(wp)
             for _ in range(12):
                 alt = vehicle.location.global_relative_frame.alt
-                print(f" Navigating WP {i+1}... Altitude: {alt:.2f}m")
+                print(f" WP {i+1} | PWM: {target_pwm} | Alt: {alt:.2f}m")
                 writer.writerow([time.time(), vehicle.battery.voltage, alt, 
-                                 vehicle.location.global_frame.lat, vehicle.location.global_frame.lon])
+                                 vehicle.location.global_frame.lat, vehicle.location.global_frame.lon, target_pwm])
                 time.sleep(1)
 
-        print("--- Phase 5: Mission Success & Land ---")
+        print(f"--- Phase 5: Success! Data saved to {output_file} ---")
         vehicle.channels.overrides = {}
         vehicle.mode = VehicleMode("RTL")
 
