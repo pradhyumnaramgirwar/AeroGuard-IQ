@@ -9,7 +9,7 @@ This project implements an autonomous geometric flight mission using Python and 
 - [x] **High-Altitude Mission:** Reached a peak altitude of **111.79 meters**.
 - [x] **Geometric Navigation:** Completed an autonomous 4-waypoint square pattern (North -> East -> South -> West) with real-time telemetry logging.
 
-### **Phase 2: Precision Altitude Control (Completed)
+### Phase 2: Precision Altitude Control (Completed)
 Successfully transitioned from Phase 1 (High Altitude) to Phase 2 (Steady State Hover).
 
 ### **Key Technical Wins:**
