@@ -34,7 +34,7 @@ def run_mission():
     print("--- Phase 4: Constant Pressure Navigation ---")
     # Instead of dropping to 0, we hold 1450 to keep the motors spinning
     print(" Reducing to Base Throttle (1450) to prevent drop...")
-    vehicle.channels.overrides['3'] = 1450
+    vehicle.channels.overrides['3'] = 1350
     time.sleep(2)
     
     # Check if we are holding height
