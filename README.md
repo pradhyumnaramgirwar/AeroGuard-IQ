@@ -9,9 +9,18 @@ This project implements an autonomous geometric flight mission using Python and 
 - [x] **High-Altitude Mission:** Reached a peak altitude of **111.79 meters**.
 - [x] **Geometric Navigation:** Completed an autonomous 4-waypoint square pattern (North -> East -> South -> West) with real-time telemetry logging.
 
-### **Phase 2: Precision Control (1350 PWM)**
-- [x] **System Identification:** Conducted throttle-ramp tests to find the 1350 PWM equilibrium.
-- [x] **Damped Altitude Control:** Successfully restricted altitude drift to a stable range (7m - 17m) during a square mission.
+## **Phase 2: Precision Altitude Control (Completed)
+Successfully transitioned from Phase 1 (High Altitude) to Phase 2 (Steady State Hover).
+
+### **Key Technical Wins:**
+- **System Identification:** Determined that **1350 PWM** is the equilibrium point ($Thrust \approx Weight$) for this simulated environment.
+- **Altitude Damping:** Reduced vertical drift from **111m** (Phase 1) down to a controlled range of **7m - 17m**.
+- **Data Integrity:** Generated `Phase2_Precision_1350PWM_Final.csv` documenting 4-waypoint stability.
+
+### **Flight Characteristics (1350 PWM):**
+* **Start Altitude:** 12.29m
+* **Peak Altitude:** 16.72m (Waypoint 1)
+* **Final Altitude:** 6.6m (Waypoint 4)
 
 ## 📁 Project Structure
 * `waypoint_mission.py`: Final mission script with multi-waypoint logic and 'Write' mode telemetry.
