@@ -4,10 +4,14 @@
 ## 🚀 Project Achievement: 100% Complete
 This project implements an autonomous geometric flight mission using Python and DroneKit-SITL. The primary engineering challenge was overcoming a "Death Dive" altitude drop in the ArduCopter 3.3 firmware by implementing a custom stability handshake.
 
-### **Key Achievements**
+### **Phase 1**
 - [x] **Stability Handshake:** Successfully implemented a 1450-throttle "Constant Pressure" logic to bypass EKF/GPS altitude drops.
 - [x] **High-Altitude Mission:** Reached a peak altitude of **111.79 meters**.
 - [x] **Geometric Navigation:** Completed an autonomous 4-waypoint square pattern (North -> East -> South -> West) with real-time telemetry logging.
+
+### **Phase 2: Precision Control (1350 PWM)**
+- [x] **System Identification:** Conducted throttle-ramp tests to find the 1350 PWM equilibrium.
+- [x] **Damped Altitude Control:** Successfully restricted altitude drift to a stable range (7m - 17m) during a square mission.
 
 ## 📁 Project Structure
 * `waypoint_mission.py`: Final mission script with multi-waypoint logic and 'Write' mode telemetry.
