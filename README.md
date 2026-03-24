@@ -1,7 +1,7 @@
 # AeroGuard-IQ: Autonomous Drone Navigation System
 **Master's Project (EEIT) - Otto von Guericke University Magdeburg**
 
-## 🚀 Project Status: Phase 2 Complete (100%)
+## 🚀 Project Status: Phase 3 Complete (100%)
 This project implements an autonomous geometric flight mission using Python and DroneKit-SITL. The primary challenge was overcoming the "Death Dive" altitude drop in ArduCopter 3.3 by implementing a custom stability handshake and throttle tuning.
 
 ---
@@ -18,6 +18,19 @@ This project implements an autonomous geometric flight mission using Python and 
 - **Result:** Identified **1350 PWM** as the "Magic Number" for stable flight ($Thrust \approx Weight$).
 - **Success:** Completed a 4-waypoint square with altitude restricted to a damped range (7m - 17m).
 - **Data:** `Phase2_Precision_1350PWM_Final.csv`
+
+## 🧠 Phase 3: Adaptive Autonomy & Failsafes (Completed)
+In this phase, the system transitioned from "Static Overrides" to "Reactive Logic," allowing the drone to monitor its own state and correct flight errors in real-time.
+
+### **Key Technical Wins:**
+- **Closed-Loop Feedback:** Implemented a "Nudge" logic that monitors altitude every 1 second.
+- **Altitude Floor:** Successfully prevented the Phase 2 "sink" by triggering a **1380 PWM** boost whenever altitude dropped below **9.0m**.
+- **Battery Watchdog:** Integrated a background failsafe to trigger **Return-to-Launch (RTL)** if voltage drops below **10.5V**.
+
+### **Flight Performance (Adaptive Logic):**
+* **Minimum Altitude:** 8.73m (Successfully caught and corrected by the script).
+* **Maximum Altitude:** 15.64m (Corrected by 1320 PWM nudge).
+* **Stability Status:** The drone maintained a safe 7m flight envelope without manual intervention.
 
 ---
 
