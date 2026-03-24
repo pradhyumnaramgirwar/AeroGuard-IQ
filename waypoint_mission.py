@@ -7,10 +7,9 @@ print("Connecting to AeroGuard-IQ...")
 vehicle = connect('tcp:127.0.0.1:5760', wait_ready=False)
 
 def run_mission():
-    # Use 'w' mode to overwrite old data and start a fresh log
+    # 'w' mode ensures a fresh, clean log for every flight
     with open('flight_log.csv', 'w', newline='') as f:
         writer = csv.writer(f)
-        # Write the Header Row
         writer.writerow(['Timestamp', 'Voltage', 'Altitude', 'Lat', 'Lon'])
 
         print("--- Phase 1: Heavy Stabilization (60s) ---")
@@ -23,7 +22,6 @@ def run_mission():
         
         print("--- Phase 3: Forced Takeoff ---")
         vehicle.mode = VehicleMode("GUIDED")
-        
         while not vehicle.armed:
             print(" Forcing Arm...")
             vehicle.armed = True
@@ -32,39 +30,40 @@ def run_mission():
         print("Kicking Throttle to 50% (1500)...")
         vehicle.channels.overrides['3'] = 1500
         
-        # Climb until 10m
+        # Climb to 10m
         while vehicle.location.global_relative_frame.alt < 10:
             alt = vehicle.location.global_relative_frame.alt
             print(f" Climbing... Altitude: {alt:.2f}m")
-            # Log the data during climb
             writer.writerow([time.time(), vehicle.battery.voltage, alt, 
                              vehicle.location.global_frame.lat, vehicle.location.global_frame.lon])
             time.sleep(1)
 
-        print("--- Phase 4: Constant Pressure Navigation ---")
-        # 1450 provides the lift needed for the 47m climb achievement
-        print(" Reducing to Base Throttle (1450) to prevent drop...")
-        vehicle.channels.overrides['3'] = 1450
-        time.sleep(2)
+        print("--- Phase 4: Multi-Waypoint Square Mission ---")
+        vehicle.channels.overrides['3'] = 1450 # Maintain Constant Lift
         
-        current_alt = vehicle.location.global_relative_frame.alt
-        if current_alt > 7:
-            print(f" Stability Confirmed at {current_alt:.2f}m. Moving 10m North...")
-            target = LocationGlobalRelative(vehicle.location.global_frame.lat + 0.0001, 
-                                           vehicle.location.global_frame.lon, 10)
-            vehicle.simple_goto(target)
-            
-            for i in range(15):
+        # Capture starting position
+        start_lat = vehicle.location.global_frame.lat
+        start_lon = vehicle.location.global_frame.lon
+        
+        # Define 4 Corners (North, East, South, West back to start)
+        # 0.0001 degrees is roughly 10-11 meters
+        waypoints = [
+            LocationGlobalRelative(start_lat + 0.0001, start_lon, 10),            # Point 1: North
+            LocationGlobalRelative(start_lat + 0.0001, start_lon + 0.0001, 10),   # Point 2: East
+            LocationGlobalRelative(start_lat, start_lon + 0.0001, 10),            # Point 3: South
+            LocationGlobalRelative(start_lat, start_lon, 10)                     # Point 4: Back Home
+        ]
+
+        for i, wp in enumerate(waypoints):
+            print(f" >>> Moving to Waypoint {i+1}...")
+            vehicle.simple_goto(wp)
+            # Give the drone 12 seconds to reach each corner while logging
+            for _ in range(12):
                 alt = vehicle.location.global_relative_frame.alt
-                print(f" Navigating... Altitude: {alt:.2f}m")
-                # Log the data during navigation
+                print(f" Navigating WP {i+1}... Altitude: {alt:.2f}m")
                 writer.writerow([time.time(), vehicle.battery.voltage, alt, 
                                  vehicle.location.global_frame.lat, vehicle.location.global_frame.lon])
                 time.sleep(1)
-                
-            vehicle.channels.overrides = {}
-        else:
-            print(" Altitude drop detected! Emergency Landing.")
 
         print("--- Phase 5: Mission Success & Land ---")
         vehicle.mode = VehicleMode("RTL")
