@@ -22,4 +22,10 @@ The primary challenge involved a documented limitation in the legacy ArduCopter 
 
 **My Solution:** I implemented a pre-flight "Bulletproof Check" that waits for explicit hardware alignment before firing takeoff commands, successfully stabilizing the initial flight sequence despite firmware-level physics reboots.
 
+## 🛠 How to Run
+1. Start the SITL Simulator:
+   `dronekit-sitl copter-3.3 --home=52.120533,11.627632,0,0`
+2. Run the Autonomous Script:
+   `python obstacle_avoidance_v4.py`
+   
 ---
