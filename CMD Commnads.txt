@@ -1,0 +1,2 @@
+py -3.9 -m dronekit_sitl copter-3.3 --home=52.120533,11.627632,0,0 --wipe
+py -3.9 obstacle_avoidance_v4.py
